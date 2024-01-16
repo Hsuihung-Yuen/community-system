@@ -4,6 +4,10 @@ server:
     context-path: /community
 
 spring:
+  # 将application-local.yml包进来
+  profiles:
+    active: local
+    include: -local
   thymeleaf:
     cache: true
     check-template: true
@@ -11,12 +15,18 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/community?characterEncoding=utf-8&useSSL=false&serverTimezone=Hongkong
-    username: root
-    password: hsuihung
     hikari:
       maximum-pool-size: 15
       minimum-idle: 5
       idle-timeout: 3000
+  mail:
+    port: 465
+    protocol: smtps
+    properties:
+      mail:
+        smtp:
+          ssl:
+            enable: true
 
 mybatis:
   mapper-locations: classpath:mapper/*.xml
@@ -24,3 +34,11 @@ mybatis:
   configuration:
     use-generated-keys: true
     map-underscore-to-camel-case: true
+
+community:
+  path:
+    domain: http://localhost:8080
+    # 需要修改为本机的绝对路径
+    upload: /Users/hhy/JavaProjects/community-system/header_upload
+
+

@@ -27,6 +27,13 @@
         WHERE username=#{username}
     </select>
 
+    <select id="selectByEmail" resultType="User">
+        select
+        <include refid="selectFields"></include>
+        from user
+        where email = #{email}
+    </select>
+
     <!--增加时是没有传入id，通过mysql底层自增id再传给Use，因此需要有一个keyProperty-->
     <insert id="insertUser" parameterType="User" keyProperty="id">
         INSERT INTO user (<include refid="insertFields"/>)
