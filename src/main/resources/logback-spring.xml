@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
     <contextName>community-system</contextName>
-    <property name="LOG_PATH" value="/User/hhy/JavaProjects/community-system/log"/>
+    <property name="LOG_PATH" value="/Users/hhy/JavaProjects/community-system/log"/>
     <property name="APPDIR" value="community-system"/>
 
     <!-- error file -->

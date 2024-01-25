@@ -6,12 +6,14 @@ import cn.hhy.communitysystem.dao.UserMapper;
 import cn.hhy.communitysystem.entity.DiscussPost;
 import cn.hhy.communitysystem.entity.User;
 import cn.hhy.communitysystem.entity.LoginTicket;
+import cn.hhy.communitysystem.util.SensitiveFilter;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.web.util.HtmlUtils;
 
 import java.util.Date;
 import java.util.List;
@@ -29,6 +31,9 @@ public class MapperTests {
 
     @Autowired
     private LoginTicketMapper loginTicketMapper;
+
+    @Autowired
+    private SensitiveFilter sensitiveFilter;
 
     @Test
     public void testSelectUser() {
@@ -103,5 +108,19 @@ public class MapperTests {
         System.out.println(loginTicket);
     }
 
-
+    @Test
+    public void testInsertDiscussPost() {
+        DiscussPost post = DiscussPost.builder()
+                .userId(6666)
+                .title("test")
+                .content("test2")
+                .createTime(new Date())
+                .build();
+        post.setTitle(HtmlUtils.htmlEscape(post.getTitle()));
+        post.setContent(HtmlUtils.htmlEscape(post.getContent()));
+        // 过滤敏感词
+        post.setTitle(sensitiveFilter.filter(post.getTitle()));
+        post.setContent(sensitiveFilter.filter(post.getContent()));
+        discussPostMapper.insertDiscussPost(post);
+    }
 }
