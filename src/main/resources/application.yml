@@ -27,6 +27,10 @@ spring:
         smtp:
           ssl:
             enable: true
+  redis:
+    database: 11
+    host: localhost
+    port: 6379
 
 mybatis:
   mapper-locations: classpath:mapper/*.xml
@@ -40,5 +44,6 @@ community:
     domain: http://localhost:8080
     # 需要修改为本机的绝对路径
     upload: /Users/hhy/JavaProjects/community-system/header_upload
+
 
 

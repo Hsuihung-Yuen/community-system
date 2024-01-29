@@ -3,7 +3,9 @@ package cn.hhy.communitysystem.controller;
 import cn.hhy.communitysystem.entity.DiscussPost;
 import cn.hhy.communitysystem.entity.Page;
 import cn.hhy.communitysystem.service.DiscussPostService;
+import cn.hhy.communitysystem.service.LikeService;
 import cn.hhy.communitysystem.service.UserService;
+import cn.hhy.communitysystem.util.CommunityConstant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,13 +15,16 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import java.util.*;
 
 @Controller
-public class HomeController {
+public class HomeController implements CommunityConstant {
 
     @Autowired
     private DiscussPostService discussPostService;
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private LikeService likeService;
 
     @RequestMapping(path = "/index", method = RequestMethod.GET)
     public String getIndexPage(Model model, Page page) {
@@ -36,6 +41,10 @@ public class HomeController {
                 Map<String, Object> tmp_map = new HashMap<>();
                 tmp_map.put("post", home_post);
                 tmp_map.put("user", userService.findUserById(home_post.getUserId()));
+
+                long likeCount = likeService.findEntityLikeCount(ENTITY_TYPE_POST, home_post.getId());
+                tmp_map.put("likeCount", likeCount);
+
                 dicussPosts.add(tmp_map);
             }
         }

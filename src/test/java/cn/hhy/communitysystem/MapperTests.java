@@ -118,7 +118,7 @@ public class MapperTests {
                 .build();
         post.setTitle(HtmlUtils.htmlEscape(post.getTitle()));
         post.setContent(HtmlUtils.htmlEscape(post.getContent()));
-        // 过滤敏感词
+
         post.setTitle(sensitiveFilter.filter(post.getTitle()));
         post.setContent(sensitiveFilter.filter(post.getContent()));
         discussPostMapper.insertDiscussPost(post);

@@ -19,6 +19,9 @@ import java.util.Date;
 @Slf4j
 public class ServiceLogAspect {
 
+    //前面表示匹配的返回类型，后面表示匹配的类类型
+    //"execution"表示切点类型为i=方法执行
+    //(..)表示任意参数
     @Pointcut("execution(* cn.hhy.communitysystem.service.*.*(..))")
     public void pointcut() {
     }
@@ -30,7 +33,8 @@ public class ServiceLogAspect {
         HttpServletRequest request = attributes.getRequest();
         String ip = request.getRemoteHost();
         String now = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+        //获取类名和方法名
         String target = joinPoint.getSignature().getDeclaringTypeName() + "." + joinPoint.getSignature().getName();
-        log.info(String.format("用户{},在{},访问了{}。", ip, now, target));
+        log.info("用户{},在{},访问了{}。", ip, now, target);
     }
 }
