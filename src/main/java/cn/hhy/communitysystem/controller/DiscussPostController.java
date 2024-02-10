@@ -1,9 +1,7 @@
 package cn.hhy.communitysystem.controller;
 
-import cn.hhy.communitysystem.entity.Comment;
-import cn.hhy.communitysystem.entity.DiscussPost;
-import cn.hhy.communitysystem.entity.Page;
-import cn.hhy.communitysystem.entity.User;
+import cn.hhy.communitysystem.entity.*;
+import cn.hhy.communitysystem.event.EventProducer;
 import cn.hhy.communitysystem.service.CommentService;
 import cn.hhy.communitysystem.service.DiscussPostService;
 import cn.hhy.communitysystem.service.LikeService;
@@ -39,6 +37,9 @@ public class DiscussPostController implements CommunityConstant {
     @Autowired
     private LikeService likeService;
 
+    @Autowired
+    private EventProducer eventProducer;
+
     @RequestMapping(path = "/add", method = RequestMethod.POST)
     @ResponseBody
     public String addDiscussPost(String title, String content) {
@@ -47,12 +48,28 @@ public class DiscussPostController implements CommunityConstant {
             return CommunityUtil.getJSONString(403, "你还没有登录哦!");
         }
 
-        DiscussPost post = DiscussPost.builder()
-                .userId(user.getId())
-                .title(title)
-                .content(content)
-                .createTime(new Date())
-                .build();
+//        DiscussPost post = DiscussPost.builder()
+//                .userId(user.getId())
+//                .title(title)
+//                .content(content)
+//                .createTime(new Date())
+//                .build();
+//        discussPostService.addDiscussPost(post);
+
+        DiscussPost post = new DiscussPost();
+        post.setUserId(user.getId());
+        post.setTitle(title);
+        post.setContent(content);
+        post.setCreateTime(new Date());
+        discussPostService.addDiscussPost(post);
+
+        // 触发发帖事件
+        Event event = new Event()
+                .setTopic(TOPIC_PUBLISH)
+                .setUserId(user.getId())
+                .setEntityType(ENTITY_TYPE_POST)
+                .setEntityId(post.getId());
+        eventProducer.fireEvent(event);
 
         return CommunityUtil.getJSONString(0, "发布成功!");
     }
