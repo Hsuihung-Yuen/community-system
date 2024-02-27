@@ -10,7 +10,7 @@ import java.util.List;
 public interface DiscussPostMapper {
 
     //传递多个非javabean对象或者基本数据类型时要加@Param
-    List<DiscussPost> selectDiscussPosts(@Param("userId") int userId, @Param("offset") int offset, @Param("limit") int limit);
+    List<DiscussPost> selectDiscussPosts(@Param("userId") int userId, @Param("offset") int offset, @Param("limit") int limit, @Param("orderMode") int orderMode);
 
     int selectDiscussPostRows(int userId);
 
